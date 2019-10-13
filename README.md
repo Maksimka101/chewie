@@ -4,6 +4,11 @@ The video player for Flutter with a heart of gold.
 
 The [`video_player`](https://pub.dartlang.org/packages/video_player) plugin provides low-level access to video playback. Chewie uses the `video_player` under the hood and wraps it in a friendly Material or Cupertino UI! 
 
+## Fork changes
+
+If gained aspect ratio is null it gain video aspect ration.
+
+
 ## Demo
 
 ![Demo](https://github.com/brianegan/chewie/raw/master/assets/chewie_demo.gif)
