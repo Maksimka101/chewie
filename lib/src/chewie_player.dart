@@ -40,6 +40,7 @@ class ChewieState extends State<Chewie> {
   @override
   void initState() {
     super.initState();
+    widget.controller.onInitialize = () => setState(() {});
     widget.controller.addListener(listener);
   }
 
@@ -103,10 +104,10 @@ class ChewieState extends State<Chewie> {
   }
 
   Widget _fullScreenRoutePageBuilder(
-    BuildContext context,
-    Animation<double> animation,
-    Animation<double> secondaryAnimation,
-  ) {
+      BuildContext context,
+      Animation<double> animation,
+      Animation<double> secondaryAnimation,
+      ) {
     var controllerProvider = _ChewieControllerProvider(
       controller: widget.controller,
       child: PlayerWithControls(),
@@ -195,7 +196,7 @@ class ChewieController extends ChangeNotifier {
     ],
     this.routePageBuilder = null,
   }) : assert(videoPlayerController != null,
-            'You must provide a controller to play a video') {
+  'You must provide a controller to play a video') {
     _initialize();
   }
 
@@ -273,10 +274,13 @@ class ChewieController extends ChangeNotifier {
   /// Defines a custom RoutePageBuilder for the fullscreen
   final ChewieRoutePageBuilder routePageBuilder;
 
+  /// Call after initialize
+  void Function() onInitialize = () {};
+
   static ChewieController of(BuildContext context) {
     final chewieControllerProvider =
-        context.inheritFromWidgetOfExactType(_ChewieControllerProvider)
-            as _ChewieControllerProvider;
+    context.inheritFromWidgetOfExactType(_ChewieControllerProvider)
+    as _ChewieControllerProvider;
 
     return chewieControllerProvider.controller;
   }
@@ -291,6 +295,7 @@ class ChewieController extends ChangeNotifier {
     if ((autoInitialize || autoPlay) &&
         !videoPlayerController.value.initialized) {
       await videoPlayerController.initialize();
+      onInitialize();
     }
 
     if (autoPlay) {

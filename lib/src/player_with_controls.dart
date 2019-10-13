@@ -19,7 +19,7 @@ class PlayerWithControls extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         child: AspectRatio(
           aspectRatio:
-              chewieController.aspectRatio ?? _calculateAspectRatio(context),
+          chewieController.aspectRatio ?? _calculateAspectRatio(context),
           child: _buildPlayerWithControls(chewieController, context),
         ),
       ),
@@ -47,26 +47,34 @@ class PlayerWithControls extends StatelessWidget {
   }
 
   Widget _buildControls(
-    BuildContext context,
-    ChewieController chewieController,
-  ) {
+      BuildContext context,
+      ChewieController chewieController,
+      ) {
     return chewieController.showControls
         ? chewieController.customControls != null
-            ? chewieController.customControls
-            : Theme.of(context).platform == TargetPlatform.android
-                ? MaterialControls()
-                : CupertinoControls(
-                    backgroundColor: Color.fromRGBO(41, 41, 41, 0.7),
-                    iconColor: Color.fromARGB(255, 200, 200, 200),
-                  )
+        ? chewieController.customControls
+        : Theme.of(context).platform == TargetPlatform.android
+        ? MaterialControls()
+        : CupertinoControls(
+      backgroundColor: Color.fromRGBO(41, 41, 41, 0.7),
+      iconColor: Color.fromARGB(255, 200, 200, 200),
+    )
         : Container();
   }
 
   double _calculateAspectRatio(BuildContext context) {
+    final videoSize = ChewieController.of(context).videoPlayerController.value.size;
     final size = MediaQuery.of(context).size;
-    final width = size.width;
-    final height = size.height;
+    double width;
+    double height;
+    if (videoSize != null) {
+      width = videoSize.width;
+      height = videoSize.height;
+    } else {
+      width = size.width;
+      height = size.height;
+    }
 
-    return width > height ? width / height : height / width;
+    return width / height;
   }
 }
