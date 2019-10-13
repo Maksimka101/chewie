@@ -75,6 +75,6 @@ class PlayerWithControls extends StatelessWidget {
       height = size.height;
     }
 
-    return width > height ? width / height : height / width;
+    return width / height;
   }
 }
